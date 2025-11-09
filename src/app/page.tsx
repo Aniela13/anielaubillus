@@ -25,12 +25,7 @@ interface ServerResponse {
   };
   tcg?: Record<string, string | number>; 
 }
-interface CustomStorageApi {
-  list: (prefix: string) => Promise<{ keys: string[] } | null>;
-  get: (key: string) => Promise<{ value: string } | null>;
-  set: (key: string, value: string) => Promise<void>;
-  delete: (key: string) => Promise<void>;
-}
+
 
 // Extendemos la interfaz global Window para incluir nuestra propiedad 'storage'
 // Esto resuelve el error de compilación.
@@ -286,7 +281,7 @@ const PokemonCardScanner = () => {
       const trollPrices: string[] = [];
       const trollTypes: string[] = [];
       
-      trollCards.forEach((troll: any) => {
+      trollCards.forEach((troll: TrollPrice) => {
         trollPrices.push(troll.price || "N/A");
         trollTypes.push(troll.type || troll.name || "N/A");
       });
