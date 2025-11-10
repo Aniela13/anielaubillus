@@ -1,11 +1,11 @@
 // src/components/ScannerView.tsx
 import React from 'react';
 import { Camera, Upload, X, AlertCircle, Zap, Star, Package, Trash2 } from 'lucide-react';
-import { CardData, ServerResponse, TrollPrice } from './PokemonCardScanner'; // Importar tipos
+import { CardData} from './PokemonCardScanner'; // Importar tipos
 
 // Tipos de Props
 interface ScannerViewProps {
-    currentCard: CardData | null;
+    currentCard: CardData | null ;
     isProcessing: boolean;
     error: string | null;
     selectedImage: string | null;
@@ -109,7 +109,7 @@ const ScannerView: React.FC<ScannerViewProps> = ({
         setSelectedImage(imageUrl);
         await sendImageToServer(file);
     };
-
+    
     return (
         <div className="grid lg:grid-cols-2 gap-6">
             {/* 1. Scanner/Result Section */}
@@ -147,8 +147,8 @@ const ScannerView: React.FC<ScannerViewProps> = ({
                                 {selectedImage && !isProcessing ? (
                                     <div className="relative">
                                         <img 
-                                    src={currentCard.image} 
-                                    alt={currentCard.nombre} 
+                                    src={selectedImage} 
+                                    alt={"Imagen seleccionada para escanear"} 
                                     // CLASES DE ESTILO CRÍTICAS: Aseguran que la imagen se ajuste y limite su altura
                                     className="w-full rounded-2xl shadow-2xl border-4 border-yellow-400 h-auto object-contain bg-gray-900" 
                                     style={{ maxHeight: '450px' }} // Límite de altura para evitar ventana larga
@@ -231,20 +231,6 @@ const ScannerView: React.FC<ScannerViewProps> = ({
                                             <div key={index} className="flex justify-between items-center mb-2 bg-white rounded-lg p-2 shadow">
                                                 <span className="text-sm font-bold text-gray-700">{item.type}:</span>
                                                 <span className="font-black text-green-700 text-lg">${item.price}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {currentCard.trollPrices.length > 0 && (
-                                    <div>
-                                        <p className="font-black text-sm text-gray-700 mb-3 flex items-center gap-2">
-                                            <span className="bg-orange-500 text-white px-2 py-1 rounded text-xs">Troll & Toad</span>
-                                        </p>
-                                        {currentCard.trollPrices.map((price, index) => (
-                                            <div key={index} className="flex justify-between items-center mb-2 bg-white rounded-lg p-2 shadow">
-                                                <span className="text-sm font-bold text-gray-700 truncate max-w-[60%]">{currentCard.trollTypes[index]}:</span>
-                                                <span className="font-black text-green-700 text-lg">{price}</span>
                                             </div>
                                         ))}
                                     </div>

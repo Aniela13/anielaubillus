@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { Camera, Zap, Star, Settings, User, LogIn, FolderOpen, Mail, Heart, HelpCircle, Award, Edit } from 'lucide-react';
+import { Camera, Zap, Star, Settings, User, LogIn, FolderOpen, Heart} from 'lucide-react';
 
 // Importación de Componentes Vistas y Modales
 import { ContactModal, DonateModal, RankingHelpModal } from './Modals';
@@ -12,21 +12,12 @@ import SettingsView from './SettingsView';
 import ScannerView from './ScannerView';
 
 // Tipos (Tipos Centralizados)
-export interface TrollPrice {
-  type?: string;
-  name?: string;
-  price?: string;
-}
 
 export interface ServerResponse {
   error?: string;
   nombre?: string;
   expansionf?: string; 
   url?: string;
-  troll?: {
-    Troll?: TrollPrice[];
-    cards?: TrollPrice[]; 
-  };
   tcg?: Record<string, string | number>; 
 }
 
@@ -35,8 +26,6 @@ export interface CardData {
   nombre: string;
   expansion: string;
   image: string;
-  trollPrices: string[];
-  trollTypes: string[];
   tcgPrices: { type: string; price: string }[];
   timestamp: string;
   salePrice?: number;
@@ -67,7 +56,7 @@ interface CardInfo {
             holofoil?: { market?: number | string };
             normal?: { market?: number | string };
             // Agregamos un index signature si hay otras propiedades a nivel superior
-            [key: string]: any; 
+            [key: string]: { market?: number | string } | undefined; 
         } 
     }; 
     cardmarket?: { prices?: { lowPrice?: number; averageSellPrice?: number; } };
@@ -211,37 +200,35 @@ const PokemonCardScanner = () => {
         
         // --- PRECIOS ---
 
-        // 3. Lógica para Troll & Toad (Usamos la estructura original si existe, si no, es N/A)
-        const trollData = response.troll || {};
-        const trollCards = trollData.Troll || trollData.cards || [];
-        const trollPrices: string[] = [];
-        const trollTypes: string[] = [];
-        
-        trollCards.forEach((troll: TrollPrice) => {
-            trollPrices.push(troll.price || "N/A");
-            trollTypes.push(troll.type || troll.name || "N/A");
-        });
-
         // 4. Lógica para TCGPlayer (Extrayendo Holofoil y Market Price)
         const tcgPricesAPI = cardInfo.tcgplayer?.prices || {};
         const tcgPricesList: { type: string; price: string }[] = [];
 
         if (tcgPricesAPI.holofoil?.market) {
-             tcgPricesList.push({ 
-                 type: "Holo Market Price", 
-                 price: parseFloat(tcgPricesAPI.holofoil.market).toFixed(2) 
-             });
+            const priceValue = tcgPricesAPI.holofoil.market;
+    
+            // Si sabes que es un número, puedes forzar el casteo para evitar el linter, pero la conversión a String es más segura con parseFloat.
+            const priceString = String(priceValue);
+
+            tcgPricesList.push({ 
+                type: "Holo Market Price", 
+                price: parseFloat(priceString).toFixed(2) // o: String(priceValue).toFixed(2) si el linter lo permite
+            });
         }
         if (tcgPricesAPI.normal?.market) {
+            const priceValue = tcgPricesAPI.normal.market;
+            const priceString = String(priceValue); 
              tcgPricesList.push({ 
                  type: "Normal Market Price", 
-                 price: parseFloat(tcgPricesAPI.normal.market).toFixed(2) 
+                 price: parseFloat(priceString).toFixed(2)
              });
         }
         if (tcgPricesAPI.lowPrice) {
+            const priceValue = tcgPricesAPI.lowPrice;
+            const priceString = String(priceValue);
              tcgPricesList.push({ 
                  type: "Low Price (CardMarket)", 
-                 price: parseFloat(tcgPricesAPI.lowPrice).toFixed(2) 
+                 price: parseFloat(priceString).toFixed(2) 
              });
         }
         
@@ -251,8 +238,6 @@ const PokemonCardScanner = () => {
             nombre: nombre,
             expansion: expansion,
             image: cardImageUrl,
-            trollPrices: trollPrices,
-            trollTypes: trollTypes,
             tcgPrices: tcgPricesList,
             timestamp: new Date().toISOString()
         };
@@ -266,7 +251,7 @@ const PokemonCardScanner = () => {
         }
     };
     
-    const sendImageToServer = async (imageBlob: Blob, processingText: string = 'Analizando tu carta...') => {
+    const sendImageToServer = async (imageBlob: Blob) => {
         setIsProcessing(true);
         setError(null);
 
