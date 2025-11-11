@@ -67,7 +67,7 @@ interface FullServerResponse extends ServerResponse {
 }
 
 // URL de la API (MEJORA: Usar variable de entorno real en un proyecto Next.js)
-const SERVER_URL = process.env.NEXT_PUBLIC_API_URL || "http://52.203.146.149:5000/process_image";
+const SERVER_URL = process.env.NEXT_PUBLIC_API_URL || "http://172.31.87.111:5000/process_image";
 
 // Sistema de Rankings (Mantener la lógica aquí para ser pasada como prop)
 const getRankInfo = (cardCount: number) => {
