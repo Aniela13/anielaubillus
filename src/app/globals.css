@@ -242,6 +242,38 @@ body {
 .delay-700  { animation-delay: .7s; }
 .delay-1400 { animation-delay: 1.4s; }
 
-@media (prefers-reduced-motion: reduce) {
-  .rays-beam { animation: none; opacity: .08; }
+/*pruebaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */
+
+/* Estilos base (por defecto para todos, o Mobile First) */
+.scan-results {
+    /* Por defecto, apilados verticalmente para móviles */
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
 }
+
+.card-image {
+    width: 100%; /* La imagen ocupa todo el ancho disponible */
+}
+
+/* ➡️ Media Query para dispositivos con un ancho MÍNIMO de 768px (Tablets y PCs) */
+@media (min-width: 768px) {
+    .scan-results {
+        /* En pantallas más grandes, muestra en horizontal */
+        flex-direction: row; 
+        justify-content: space-around;
+        align-items: flex-start;
+    }
+    
+    .card-image {
+        width: 300px; /* Tamaño fijo para la imagen en PC */
+    }
+
+    /* También puedes ocultar elementos o cambiar el tamaño de la fuente */
+    .header-title {
+        font-size: 2.5em;
+    }
+}
+/* @media (prefers-reduced-motion: reduce) {
+  .rays-beam { animation: none; opacity: .08; }
+} */
