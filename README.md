@@ -9,7 +9,7 @@ Escanea cartas Pokémon con tu cámara, identifícalas vía la API de TCG, consu
 ---
 
 ##  Funcionalidades
-- **Scanner**: abre la cámara, detecta la carta, busca en la **API de TCG** y valida coincidencias.
+- **Scanner**: abre la cámara/imagen subida, detecta la carta, busca en la **API de TCG** y valida coincidencias.
 - **Precio de mercado**: muestra cotizaciones actuales y el rango de precios (cuando aplica).
 - **Añadir a colección**: asigna tu **precio** y guarda la carta en tu colección personal.
 - **Perfil & Logros**: visualiza tu progreso; hay **niveles** que se desbloquean según la cantidad de cartas guardadas.
@@ -61,7 +61,7 @@ Escanea cartas Pokémon con tu cámara, identifícalas vía la API de TCG, consu
 ##  Flujo del Frontend
 **Navegación principal (menú):**
 - **Scanner** (`/scanner`)
-  1) Solicita permiso de **cámara**.  
+  1) Solicita permiso de **cámara**/ sube imagen de archivos.  
   2) Captura imagen y extrae pistas (nombre/edición/código) *(por OCR o selección manual según tu implementación)*.  
   3) Consulta **API de TCG** con esos datos.  
   4) Valida la carta y **muestra precio de mercado**.  
